@@ -1,15 +1,10 @@
 package me.t3sl4.updater.utils;
 
-import me.t3sl4.updater.utils.SystemVariables;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class FileUtil {
     public static void criticalFileSystem() throws IOException {

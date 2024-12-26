@@ -9,12 +9,7 @@ import me.t3sl4.updater.utils.GeneralUtil;
 import me.t3sl4.updater.utils.SceneUtil;
 import me.t3sl4.updater.utils.SystemVariables;
 
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.prefs.Preferences;
 

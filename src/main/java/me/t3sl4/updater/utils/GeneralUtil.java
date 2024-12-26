@@ -1,20 +1,12 @@
 package me.t3sl4.updater.utils;
 
 import javafx.application.Platform;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Enumeration;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.prefs.Preferences;
 
