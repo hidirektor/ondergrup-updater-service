@@ -23,7 +23,7 @@ public class Main extends Application {
         GeneralUtil.prefs = Preferences.userRoot().node("onderGrupUpdater");
         FileUtil.criticalFileSystem();
 
-        if(System.getProperty("os.name").toLowerCase().contains("win")) {
+        if(!System.getProperty("os.name").toLowerCase().contains("win")) {
             if (!GeneralUtil.checkSingleInstance()) {
                 System.out.println("Program zaten çalışıyor. Odaklanıyor...");
                 Platform.exit();

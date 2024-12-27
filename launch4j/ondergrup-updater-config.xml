@@ -16,7 +16,7 @@
   <icon>C:\Users\hidir\IdeaProjects\ondergrup-updater-service\src\main\resources\assets\images\logo.ico</icon>
   <singleInstance>
     <mutexName>ondergrup_updater</mutexName>
-    <windowTitle>Önder Grup Updater</windowTitle>
+    <windowTitle>Önder Updater</windowTitle>
   </singleInstance>
   <jre>
     <path>%JAVA_HOME%;%PATH%</path>
