@@ -23,10 +23,12 @@ public class Main extends Application {
         GeneralUtil.prefs = Preferences.userRoot().node("onderGrupUpdater");
         FileUtil.criticalFileSystem();
 
-        if (!GeneralUtil.checkSingleInstance()) {
-            System.out.println("Program zaten çalışıyor. Odaklanıyor...");
-            Platform.exit();
-            return;
+        if(System.getProperty("os.name").toLowerCase().contains("win")) {
+            if (!GeneralUtil.checkSingleInstance()) {
+                System.out.println("Program zaten çalışıyor. Odaklanıyor...");
+                Platform.exit();
+                return;
+            }
         }
 
         checkVersionFromPrefs();
