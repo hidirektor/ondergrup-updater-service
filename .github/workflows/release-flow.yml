@@ -130,9 +130,9 @@ jobs:
       - name: Prepare artifacts for release
         run: |
           mkdir -p artifacts
-          mv macos_Setup/macos_Updater.jar artifacts/
-          mv unix_Setup/unix_Updater.jar artifacts/
-          mv windows_Setup/windows_Updater.exe artifacts/
+          mv macos_Updater/macos_Updater.jar artifacts/
+          mv unix_Updater/unix_Updater.jar artifacts/
+          mv windows_Updater/windows_Updater.exe artifacts/
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
