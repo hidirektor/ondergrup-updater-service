@@ -6,6 +6,7 @@ module me.t3sl4.updater {
     requires org.json;
     requires java.net.http;
     requires java.management;
+    requires com.google.common;
 
 
     opens me.t3sl4.updater to javafx.fxml;
