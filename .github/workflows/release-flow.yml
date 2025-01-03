@@ -55,6 +55,7 @@ jobs:
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
 
+
   macos-build:
     needs: check-version
     if: needs.check-version.outputs.version_changed == 'true'
@@ -126,7 +127,11 @@ jobs:
           distribution: 'temurin'
 
       - name: Build project (Windows)
-        run: mvn clean package
+        run: |
+          for i in {1..3}; do
+            mvn clean package && break || sleep 10
+          done
+        shell: bash
 
       - name: Rename JAR file (Windows)
         run: |
