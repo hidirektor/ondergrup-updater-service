@@ -40,15 +40,13 @@ public class Main extends Application {
     }
 
     private void checkVersionFromPrefs() {
-        String updaterVersionKey = "updater_version";
-
         String currentVersion = SystemVariables.CURRENT_VERSION;
 
-        String savedUpdaterVersion = GeneralUtil.prefs.get(updaterVersionKey, null);
+        String savedUpdaterVersion = GeneralUtil.prefs.get(SystemVariables.PREF_UPDATER_KEY, null);
 
         if (savedUpdaterVersion == null || !savedUpdaterVersion.equals(currentVersion)) {
-            GeneralUtil.prefs.put(updaterVersionKey, currentVersion);
-            savedUpdaterVersion = GeneralUtil.prefs.get(updaterVersionKey, null);
+            GeneralUtil.prefs.put(SystemVariables.PREF_UPDATER_KEY, currentVersion);
+            savedUpdaterVersion = GeneralUtil.prefs.get(SystemVariables.PREF_UPDATER_KEY, null);
         }
 
         System.out.println("Updater sürümü: " + savedUpdaterVersion);

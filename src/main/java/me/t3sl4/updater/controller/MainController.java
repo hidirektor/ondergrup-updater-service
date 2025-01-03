@@ -12,6 +12,7 @@ import me.t3sl4.updater.utils.GeneralUtil;
 import me.t3sl4.updater.utils.SystemVariables;
 import me.t3sl4.util.version.VersionUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
@@ -36,28 +37,15 @@ public class MainController implements Initializable {
             @Override
             protected Void call() {
                 try {
-                    String launcherVersionKey = "launcher_version";
-
-                    String localVersion = VersionUtil.getLocalVersion(SystemVariables.PREF_NODE_NAME, launcherVersionKey);
+                    String localVersion = VersionUtil.getLocalVersion(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_LAUNCHER_KEY);
                     String latestVersion = VersionUtil.getLatestVersion(SystemVariables.REPO_OWNER, SystemVariables.LAUNCHER_REPO_NAME);
 
-                    if (localVersion != null && localVersion.equals(latestVersion)) {
-                        runLauncher();
-                    } else {
-                        String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
-                        String launcherFileName;
+                    System.out.println(localVersion + latestVersion);
 
-                        if (os.contains("win")) {
-                            launcherFileName = "windows_Launcher.exe";
-                        } else if (os.contains("mac")) {
-                            launcherFileName = "mac_Launcher.jar";
-                        } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
-                            launcherFileName = "unix_Launcher.jar";
-                        } else {
-                            throw new UnsupportedOperationException("Bu işletim sistemi desteklenmiyor: " + os);
-                        }
-                        VersionUtil.downloadLatest(SystemVariables.REPO_OWNER, SystemVariables.LAUNCHER_REPO_NAME, SystemVariables.mainPath, launcherFileName);
+                    if (localVersion != null && latestVersion != null && !localVersion.equals(latestVersion)) {
+                        handleDownload();
                     }
+                    runLauncher();
 
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -87,6 +75,14 @@ public class MainController implements Initializable {
     public void runLauncher() {
         String launcherPath = SystemVariables.launcherPath;
 
+        File launcherFile = new File(launcherPath);
+
+        if(!launcherFile.exists()) {
+            System.out.println("Launcher file cant find. Downloading started....");
+            handleDownload();
+            return;
+        }
+
         new Thread(() -> {
             try {
                 if (launcherPath.endsWith(".exe")) {
@@ -105,5 +101,21 @@ public class MainController implements Initializable {
                 System.err.println("Failed to execute launcher file: " + launcherPath);
             }
         }).start();
+    }
+
+    private void handleDownload() {
+        String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+        String launcherFileName;
+
+        if (os.contains("win")) {
+            launcherFileName = "windows_Launcher.exe";
+        } else if (os.contains("mac")) {
+            launcherFileName = "mac_Launcher.jar";
+        } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
+            launcherFileName = "unix_Launcher.jar";
+        } else {
+            throw new UnsupportedOperationException("Bu işletim sistemi desteklenmiyor: " + os);
+        }
+        VersionUtil.downloadLatest(SystemVariables.REPO_OWNER, SystemVariables.LAUNCHER_REPO_NAME, SystemVariables.mainPath, launcherFileName);
     }
 }
