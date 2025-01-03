@@ -40,8 +40,6 @@ public class MainController implements Initializable {
                     String localVersion = VersionUtil.getLocalVersion(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_LAUNCHER_KEY);
                     String latestVersion = VersionUtil.getLatestVersion(SystemVariables.REPO_OWNER, SystemVariables.LAUNCHER_REPO_NAME);
 
-                    System.out.println(localVersion + latestVersion);
-
                     if (localVersion != null && latestVersion != null && !localVersion.equals(latestVersion)) {
                         handleDownload();
                     }
