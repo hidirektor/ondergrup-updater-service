@@ -10,14 +10,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import me.t3sl4.updater.utils.GeneralUtil;
 import me.t3sl4.updater.utils.SystemVariables;
-import org.json.JSONObject;
+import me.t3sl4.util.version.VersionUtil;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -40,14 +37,26 @@ public class MainController implements Initializable {
             protected Void call() {
                 try {
                     String launcherVersionKey = "launcher_version";
-                    String currentVersion = GeneralUtil.prefs.get(launcherVersionKey, "unknown");
 
-                    String latestVersion = fetchLatestVersionFromGitHub();
+                    String localVersion = VersionUtil.getLocalVersion(SystemVariables.PREF_NODE_NAME, launcherVersionKey);
+                    String latestVersion = VersionUtil.getLatestVersion(SystemVariables.REPO_OWNER, SystemVariables.LAUNCHER_REPO_NAME);
 
-                    if (latestVersion != null && !latestVersion.equals(currentVersion)) {
-                        handleDownload();
-                    } else {
+                    if (localVersion != null && localVersion.equals(latestVersion)) {
                         runLauncher();
+                    } else {
+                        String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+                        String launcherFileName;
+
+                        if (os.contains("win")) {
+                            launcherFileName = "windows_Launcher.exe";
+                        } else if (os.contains("mac")) {
+                            launcherFileName = "mac_Launcher.jar";
+                        } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
+                            launcherFileName = "unix_Launcher.jar";
+                        } else {
+                            throw new UnsupportedOperationException("Bu işletim sistemi desteklenmiyor: " + os);
+                        }
+                        VersionUtil.downloadLatest(SystemVariables.REPO_OWNER, SystemVariables.LAUNCHER_REPO_NAME, SystemVariables.mainPath, launcherFileName);
                     }
 
                 } catch (Exception e) {
@@ -75,34 +84,8 @@ public class MainController implements Initializable {
         }
     }
 
-    private String fetchLatestVersionFromGitHub() throws IOException {
-        URL url = new URL("https://api.github.com/repos/hidirektor/ondergrup-launcher/releases/latest");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder response = new StringBuilder();
-        String inputLine;
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        JSONObject jsonResponse = new JSONObject(response.toString());
-        return jsonResponse.getString("tag_name");
-    }
-
     public void runLauncher() {
         String launcherPath = SystemVariables.launcherPath;
-
-        File launcherFile = new File(launcherPath);
-
-        if (!launcherFile.exists()) {
-            System.err.println("Launcher file not found: " + launcherPath);
-            handleDownload();
-            return; // Dosya bulunmazsa işlemden çık
-        }
 
         new Thread(() -> {
             try {
@@ -122,71 +105,5 @@ public class MainController implements Initializable {
                 System.err.println("Failed to execute launcher file: " + launcherPath);
             }
         }).start();
-    }
-
-    public void handleDownload() {
-        File selectedDirectory = new File(SystemVariables.mainPath);
-
-        if (!selectedDirectory.exists()) {
-            boolean created = selectedDirectory.mkdirs();
-            if (!created) {
-                System.out.println("İndirme dizini oluşturulamadı: " + SystemVariables.mainPath);
-                return;
-            }
-        }
-
-        File[] matchingFiles = selectedDirectory.listFiles(file -> file.getName().startsWith("windows_Launcher"));
-
-        if (matchingFiles != null && matchingFiles.length > 0) {
-            for (File file : matchingFiles) {
-                if (file.delete()) {
-                    System.out.println("Dosya silindi: " + file.getAbsolutePath());
-                } else {
-                    System.err.println("Dosya silinemedi: " + file.getAbsolutePath());
-                    return;
-                }
-            }
-            System.out.println("Tüm 'windows_Launcher' dosyaları başarıyla silindi.");
-        }
-
-        Task<Void> downloadTask = new Task<>() {
-            @Override
-            protected Void call() {
-                try {
-                    GeneralUtil.downloadLatestVersion(selectedDirectory);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void succeeded() {
-                super.succeeded();
-                Platform.runLater(() -> {
-                    runLauncher();
-                });
-            }
-
-            @Override
-            protected void failed() {
-                super.failed();
-                Platform.runLater(() -> {
-                    System.out.println("Dosya indirilemedi: " + super.getException().getMessage());
-                });
-            }
-
-            @Override
-            protected void cancelled() {
-                super.cancelled();
-                Platform.runLater(() -> {
-                    System.out.println("İndirme iptal edildi.");
-                });
-            }
-        };
-
-        Thread downloadThread = new Thread(downloadTask);
-        downloadThread.setDaemon(true);
-        downloadThread.start();
     }
 }

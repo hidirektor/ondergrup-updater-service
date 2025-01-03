@@ -1,16 +1,16 @@
 package me.t3sl4.updater.utils;
 
 import javafx.application.Platform;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Scanner;
 import java.util.prefs.Preferences;
 
 public class GeneralUtil {
@@ -169,68 +169,6 @@ public class GeneralUtil {
             System.err.println("Error opening URL: " + url);
             e.printStackTrace();
         }
-    }
-
-    public static void downloadLatestVersion(File selectedDirectory) throws IOException {
-        String os = System.getProperty("os.name").toLowerCase();
-        String downloadURL = getDownloadURLForOS(os);
-
-        if (downloadURL == null) {
-            System.out.println("Uygun sürüm bulunamadı.");
-            return;
-        }
-
-        File downloadFile = new File(selectedDirectory.getAbsolutePath() + "/" + getFileNameFromURL(downloadURL));
-        try (BufferedInputStream in = new BufferedInputStream(new URL(downloadURL).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream(downloadFile)) {
-
-            byte[] dataBuffer = new byte[1024];
-            int bytesRead;
-            long totalBytesRead = 0;
-            long fileSize = new URL(downloadURL).openConnection().getContentLengthLong();
-
-            while ((bytesRead = in.read(dataBuffer, 0, dataBuffer.length)) != -1) {
-                fileOutputStream.write(dataBuffer, 0, bytesRead);
-                totalBytesRead += bytesRead;
-            }
-
-            System.out.println("Dosya başarıyla indirildi: " + downloadFile.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    private static String getDownloadURLForOS(String os) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(SystemVariables.LAUNCHER_URL).openConnection();
-        connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
-
-        if (connection.getResponseCode() == 200) {
-            String jsonResponse = new Scanner(connection.getInputStream(), "UTF-8").useDelimiter("\\A").next();
-            JSONObject releaseData = new JSONObject(jsonResponse);
-            JSONArray assets = releaseData.getJSONArray("assets");
-
-            for (int i = 0; i < assets.length(); i++) {
-                JSONObject asset = assets.getJSONObject(i);
-                String assetName = asset.getString("name");
-
-                if (os.contains("win") && assetName.contains("windows")) {
-                    return asset.getString("browser_download_url");
-                } else if (os.contains("mac") && assetName.contains("macOS")) {
-                    return asset.getString("browser_download_url");
-                } else if ((os.contains("nix") || os.contains("nux")) && assetName.contains("linux")) {
-                    return asset.getString("browser_download_url");
-                }
-            }
-        } else {
-            System.out.println("GitHub API'ye erişilemedi: " + connection.getResponseMessage());
-        }
-
-        return null;
-    }
-
-    private static String getFileNameFromURL(String url) {
-        return url.substring(url.lastIndexOf('/') + 1);
     }
 
     public static boolean checkSingleInstance() {
