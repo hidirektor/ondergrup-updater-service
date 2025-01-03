@@ -18,12 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainController implements Initializable {
 
@@ -99,36 +94,34 @@ public class MainController implements Initializable {
     }
 
     public void runLauncher() {
-        Path launcherPath = Paths.get(SystemVariables.launcherPath);
+        String launcherPath = SystemVariables.launcherPath;
 
-        if (!Files.exists(launcherPath)) {
+        File launcherFile = new File(launcherPath);
+
+        if (!launcherFile.exists()) {
             System.err.println("Launcher file not found: " + launcherPath);
             handleDownload();
-            return;
+            return; // Dosya bulunmazsa işlemden çık
         }
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(() -> {
+        new Thread(() -> {
             try {
-                String extension = com.google.common.io.Files.getFileExtension(launcherPath.toString());
-                switch (extension) {
-                    case "exe":
-                        Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", launcherPath.toString()});
-                        break;
-                    case "jar":
-                        new ProcessBuilder("java", "-jar", launcherPath.toString()).start();
-                        break;
-                    default:
-                        System.err.println("Unsupported file type for: " + launcherPath);
-                        break;
+                if (launcherPath.endsWith(".exe")) {
+                    new ProcessBuilder("cmd.exe", "/c", launcherPath).start();
+                } else if (launcherPath.endsWith(".jar")) {
+                    new ProcessBuilder("java", "-jar", launcherPath).start();
+                } else {
+                    System.err.println("Unsupported file type for: " + launcherPath);
+                    return;
                 }
-            } catch (IOException e) {
+
+                Thread.sleep(1000);
+                Platform.runLater(() -> GeneralUtil.systemShutdown());
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
                 System.err.println("Failed to execute launcher file: " + launcherPath);
             }
-        });
-        executor.shutdown();
-        GeneralUtil.systemShutdown();
+        }).start();
     }
 
     public void handleDownload() {

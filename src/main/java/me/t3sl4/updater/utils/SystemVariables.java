@@ -1,7 +1,7 @@
 package me.t3sl4.updater.utils;
 
 public class SystemVariables {
-    public static final String CURRENT_VERSION = "v1.0.8";
+    public static final String CURRENT_VERSION = "v1.0.9";
 
     public static String LAUNCHER_URL = "https://api.github.com/repos/hidirektor/ondergrup-launcher/releases/latest\n";
 

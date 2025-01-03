@@ -40,7 +40,7 @@ public class Main extends Application {
     }
 
     private void checkVersionFromPrefs() {
-        String updaterVersionKey = "launcher_version";
+        String updaterVersionKey = "updater_version";
 
         String currentVersion = SystemVariables.CURRENT_VERSION;
 
