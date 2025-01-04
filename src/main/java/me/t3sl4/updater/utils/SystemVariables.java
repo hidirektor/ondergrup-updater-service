@@ -1,7 +1,7 @@
 package me.t3sl4.updater.utils;
 
 public class SystemVariables {
-    public static final String CURRENT_VERSION = "v1.1.4";
+    public static final String CURRENT_VERSION = "v1.1.5";
 
     public static final String REPO_OWNER = "hidirektor";
     public static final String LAUNCHER_REPO_NAME = "ondergrup-launcher";
