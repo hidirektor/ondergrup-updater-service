@@ -8,10 +8,10 @@ import me.t3sl4.updater.utils.FileUtil;
 import me.t3sl4.updater.utils.GeneralUtil;
 import me.t3sl4.updater.utils.SceneUtil;
 import me.t3sl4.updater.utils.SystemVariables;
+import me.t3sl4.util.os.OSUtil;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 public class Main extends Application {
     List<Screen> screens = Screen.getScreens();
@@ -20,8 +20,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        GeneralUtil.prefs = Preferences.userRoot().node("onderGrupUpdater");
         FileUtil.criticalFileSystem();
+
+        Platform.setImplicitExit(false);
 
         if(!System.getProperty("os.name").toLowerCase().contains("win")) {
             if (!GeneralUtil.checkSingleInstance()) {
@@ -31,25 +32,10 @@ public class Main extends Application {
             }
         }
 
-        checkVersionFromPrefs();
-
-        Platform.setImplicitExit(false);
+        OSUtil.updateLocalVersion(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_UPDATER_KEY, SystemVariables.getVersion());
 
         defaultScreen = screens.get(0);
         SceneUtil.openMainScreen(screens.get(0));
-    }
-
-    private void checkVersionFromPrefs() {
-        String currentVersion = SystemVariables.CURRENT_VERSION;
-
-        String savedUpdaterVersion = GeneralUtil.prefs.get(SystemVariables.PREF_UPDATER_KEY, null);
-
-        if (savedUpdaterVersion == null || !savedUpdaterVersion.equals(currentVersion)) {
-            GeneralUtil.prefs.put(SystemVariables.PREF_UPDATER_KEY, currentVersion);
-            savedUpdaterVersion = GeneralUtil.prefs.get(SystemVariables.PREF_UPDATER_KEY, null);
-        }
-
-        System.out.println("Updater sürümü: " + savedUpdaterVersion);
     }
 
     public static void main(String[] args) {

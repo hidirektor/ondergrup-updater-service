@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import me.t3sl4.updater.utils.GeneralUtil;
 import me.t3sl4.updater.utils.SystemVariables;
+import me.t3sl4.util.os.OSUtil;
 import me.t3sl4.util.version.VersionUtil;
 
 import java.io.File;
@@ -43,6 +44,7 @@ public class MainController implements Initializable {
                     if (localVersion != null && latestVersion != null && !localVersion.equals(latestVersion)) {
                         handleDownload();
                     }
+                    OSUtil.updatePrefData(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_LAUNCHER_KEY, latestVersion);
                     runLauncher();
 
                 } catch (Exception e) {

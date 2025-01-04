@@ -2,11 +2,10 @@ module me.t3sl4.updater {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
-    requires org.json;
     requires java.management;
     requires com.google.common;
     requires me.t3sl4.util.version;
-    requires java.prefs;
+    requires me.t3sl4.util.os;
 
 
     opens me.t3sl4.updater to javafx.fxml;
