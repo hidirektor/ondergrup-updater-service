@@ -3,13 +3,13 @@
 <br />
 <div align="center">
   <a href="https://github.com/hidirektor/ondergrup-launcher">
-    <img src="readme/onderGrupMain.png" alt="Logo" width="320" height="80">
+    <img src="readme/logo-sade.png" alt="Logo" width="320" height="80">
   </a>
 
-<h3 align="center">Önder Updater</h3>
+<h3 align="center">Canicula Updater</h3>
 
   <p align="center">
-    Önder Updater is custom updater solution for desktop products that has been developed for Önder Grup.
+    Canicula Updater is custom updater solution for desktop products that has been developed for Canicula.
     <br />
     <br />
     <a href="mailto:hidirektor@gmail.com">Report Bug</a>
@@ -43,10 +43,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![ScreenShot][product-screenshot]](https://ondergrup.com)
+[![ScreenShot][product-screenshot]]
 
-Capabilities of Önder Updater:
-* This tool just check & download newest version of Önder Launcher
+Capabilities of Canicula Updater:
+* This tool just check & download newest version of Canicula Launcher
 
 ### Built With
 
@@ -64,7 +64,7 @@ The technologies used during development are as follows:
 ## Usage
 
 There's two steps to you must follow.
-- [x] Download the latest version of Önder Updater
+- [x] Download the latest version of Canicula Updater
 - [x] And then just double click it :))
 
 [Releases Page](https://github.com/hidirektor/ondergrup-launcher/releases)
@@ -77,7 +77,7 @@ There's two steps to you must follow.
 ## Roadmap
 
 - [x] Blinking UI
-- [x] Check & Download Newest Version of Önder Launcher
+- [x] Check & Download Newest Version of Canicula Launcher
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
