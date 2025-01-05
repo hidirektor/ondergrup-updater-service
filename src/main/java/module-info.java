@@ -6,6 +6,7 @@ module me.t3sl4.updater {
     requires com.google.common;
     requires me.t3sl4.util.version;
     requires me.t3sl4.util.os;
+    requires me.t3sl4.util.file;
 
 
     opens me.t3sl4.updater to javafx.fxml;

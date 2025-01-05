@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import me.t3sl4.updater.utils.FileUtil;
 import me.t3sl4.updater.utils.GeneralUtil;
 import me.t3sl4.updater.utils.SceneUtil;
 import me.t3sl4.updater.utils.SystemVariables;
@@ -20,7 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FileUtil.criticalFileSystem();
+        GeneralUtil.criticalFileSystem();
 
         Platform.setImplicitExit(false);
 

@@ -1,6 +1,7 @@
 package me.t3sl4.updater.utils;
 
 import javafx.application.Platform;
+import me.t3sl4.util.file.DirectoryUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -62,5 +63,27 @@ public class GeneralUtil {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static void criticalFileSystem() throws IOException {
+        // İşletim sistemine göre dosya yollarını ayarla
+        String userHome = System.getProperty("user.name");
+        String os = System.getProperty("os.name").toLowerCase();
+        String basePath;
+        String programName;
+
+        if (os.contains("win")) {
+            basePath = "C:/Users/" + userHome + "/";
+            programName = "windows_Launcher.exe";
+        } else {
+            basePath = "/Users/" + userHome + "/";
+            programName = "unix_Launcher.jar";
+        }
+
+        // Dosya yollarını belirle
+        SystemVariables.mainPath = basePath + "OnderGrup/";
+        SystemVariables.launcherPath = SystemVariables.mainPath + programName;
+
+        DirectoryUtil.createDirectory(SystemVariables.mainPath);
     }
 }
