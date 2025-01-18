@@ -74,15 +74,15 @@ public class GeneralUtil {
 
         if (os.contains("win")) {
             basePath = "C:/Users/" + userHome + "/";
-            programName = "windows_Launcher.exe";
+            programName = "windows_Hydraulic.exe";
         } else {
             basePath = "/Users/" + userHome + "/";
-            programName = "unix_Launcher.jar";
+            programName = "unix_Hydraulic.jar";
         }
 
         // Dosya yollarını belirle
         SystemVariables.mainPath = basePath + "OnderGrup/";
-        SystemVariables.launcherPath = SystemVariables.mainPath + programName;
+        SystemVariables.hydraulicPath = SystemVariables.mainPath + programName;
 
         DirectoryUtil.createDirectory(SystemVariables.mainPath);
     }

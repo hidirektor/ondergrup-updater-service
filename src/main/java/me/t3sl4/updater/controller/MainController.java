@@ -38,13 +38,13 @@ public class MainController implements Initializable {
             @Override
             protected Void call() {
                 try {
-                    String localVersion = VersionUtil.getLocalVersion(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_LAUNCHER_KEY);
-                    String latestVersion = VersionUtil.getLatestVersion(SystemVariables.REPO_OWNER, SystemVariables.LAUNCHER_REPO_NAME);
+                    String localVersion = VersionUtil.getLocalVersion(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_HYDRAULIC_KEY);
+                    String latestVersion = VersionUtil.getLatestVersion(SystemVariables.REPO_OWNER, SystemVariables.HYDRAULIC_REPO_NAME);
 
                     if (localVersion != null && latestVersion != null && !localVersion.equals(latestVersion)) {
                         handleDownload();
                     }
-                    OSUtil.updatePrefData(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_LAUNCHER_KEY, latestVersion);
+                    OSUtil.updatePrefData(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_HYDRAULIC_KEY, latestVersion);
                     runLauncher();
 
                 } catch (Exception e) {
@@ -73,24 +73,24 @@ public class MainController implements Initializable {
     }
 
     public void runLauncher() {
-        String launcherPath = SystemVariables.launcherPath;
+        String hydraulicPath = SystemVariables.hydraulicPath;
 
-        File launcherFile = new File(launcherPath);
+        File hydraulicFile = new File(hydraulicPath);
 
-        if(!launcherFile.exists()) {
-            System.out.println("Launcher file cant find. Downloading started....");
+        if(!hydraulicFile.exists()) {
+            System.out.println("Hydraulic file cant find. Downloading started....");
             handleDownload();
             return;
         }
 
         new Thread(() -> {
             try {
-                if (launcherPath.endsWith(".exe")) {
-                    new ProcessBuilder("cmd.exe", "/c", launcherPath).start();
-                } else if (launcherPath.endsWith(".jar")) {
-                    new ProcessBuilder("java", "-jar", launcherPath).start();
+                if (hydraulicPath.endsWith(".exe")) {
+                    new ProcessBuilder("cmd.exe", "/c", hydraulicPath).start();
+                } else if (hydraulicPath.endsWith(".jar")) {
+                    new ProcessBuilder("java", "-jar", hydraulicPath).start();
                 } else {
-                    System.err.println("Unsupported file type for: " + launcherPath);
+                    System.err.println("Unsupported file type for: " + hydraulicPath);
                     return;
                 }
 
@@ -98,7 +98,7 @@ public class MainController implements Initializable {
                 Platform.runLater(() -> GeneralUtil.systemShutdown());
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
-                System.err.println("Failed to execute launcher file: " + launcherPath);
+                System.err.println("Failed to execute launcher file: " + hydraulicPath);
             }
         }).start();
     }
@@ -108,14 +108,14 @@ public class MainController implements Initializable {
         String launcherFileName;
 
         if (os.contains("win")) {
-            launcherFileName = "windows_Launcher.exe";
+            launcherFileName = "windows_Hydraulic.exe";
         } else if (os.contains("mac")) {
-            launcherFileName = "mac_Launcher.jar";
+            launcherFileName = "mac_Hydraulic.jar";
         } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
-            launcherFileName = "unix_Launcher.jar";
+            launcherFileName = "unix_Hydraulic.jar";
         } else {
             throw new UnsupportedOperationException("Bu işletim sistemi desteklenmiyor: " + os);
         }
-        VersionUtil.downloadLatest(SystemVariables.REPO_OWNER, SystemVariables.LAUNCHER_REPO_NAME, SystemVariables.mainPath, launcherFileName);
+        VersionUtil.downloadLatest(SystemVariables.REPO_OWNER, SystemVariables.HYDRAULIC_REPO_NAME, SystemVariables.mainPath, launcherFileName);
     }
 }
